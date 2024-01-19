@@ -12,6 +12,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  List<ProductModel> cartList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +32,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: CircleAvatar(
                 backgroundColor: Colors.red,
                 radius: 10,
-                child: Center(child: Text(CartController().cartList.length.toString())),
+                child: Center(
+                  child: Text(
+                    cartList.length.toString(),
+                  ),
+                ),
               ))
             ],
           ),
@@ -71,7 +77,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            CartController().cartList.add(widget.productModel);
+            cartList.add(widget.productModel);
+            print(cartList);
           });
         },
         child: const Icon(Icons.add),
