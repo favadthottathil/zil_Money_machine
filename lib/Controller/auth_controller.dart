@@ -31,10 +31,10 @@ class AuthController {
     await sharedPref.setString('userMail', value);
   }
 
-    Future<void> storeUserp(String value) async {
+    Future<void> storeUserpassWord(String value) async {
     final sharedPref = await SharedPreferences.getInstance();
 
-    await sharedPref.setString('userMail', value);
+    await sharedPref.setString('userPass', value);
   }
 
 
@@ -44,6 +44,20 @@ class AuthController {
 
     return sharedPref.getBool('userLogged');
   }
+
+   Future<String> getUserName() async {
+    final sharedPref = await SharedPreferences.getInstance();
+
+    return sharedPref.getString('userMail')!;
+  }
+
+   Future<String> getUserPass() async {
+    final sharedPref = await SharedPreferences.getInstance();
+
+    return sharedPref.getString('userPass')!;
+  }
+
+  
 
   
 

@@ -17,6 +17,28 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  bool isChecked = false;
+
+  checkRemembered() async {
+    if (await AuthController().getUserData() != null && await AuthController().getUserData() == true) {
+      String userName = await AuthController().getUserName();
+
+      String userPass = await AuthController().getUserPass();
+
+      setState(() {
+        userNameController.text = userName;
+
+        passwordController.text = userPass;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkRemembered();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,16 +65,33 @@ class _SignInScreenState extends State<SignInScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Checkbox(
-                      value: false,
-                      onChanged: (value) {},
+                      value: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      },
                     ),
                   ),
                   const Text('Remember Me')
                 ],
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+                    if (isChecked) {
+                      AuthController().storeUserData(true).then((_) async {
+                        await AuthController().storeUserName(
+                          userNameController.text.trim(),
+                        );
+                        await AuthController().storeUserpassWord(
+                          passwordController.text.trim(),
+                        );
+                      });
+                    } else {
+                      await AuthController().storeUserData(false);
+                    }
+
                     AuthController()
                         .loginUser(
                       userNameController.text.trim(),
